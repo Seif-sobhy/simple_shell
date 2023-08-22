@@ -1,96 +1,100 @@
 #include "shell.h"
 
 /**
- * search_path - Search In $PATH For Executable Command
- * @command: Parsed Input
- * Return: 1 for Failure, 0 for Success.
+ * find_executable_in_path - Search For Executable Command in PATH
+ * @command: Parsed Input Command
+ * Return: 1 on Failure, 0 on Success.
  */
-int search_path(char **command)
+int find_executable_in_path(char **command)
 {
-	char *path, *dir, *command_path;
+	char *path_env, *dir, *command_path;
 	struct stat buffer;
 
-	path = get_env("PATH");
-	dir = strtok(path, ":");
+	path_env = _getenv("PATH");
+	dir = strtok(path_env, ":");
 	while (dir != NULL)
 	{
-		command_path = build_path(*command, dir);
+		command_path = build(*command, dir);
 		if (stat(command_path, &buffer) == 0)
 		{
 			*command = strdup(command_path);
 			free(command_path);
-			free(path);
+			free(path_env);
 			return (0);
 		}
 		free(command_path);
 		dir = strtok(NULL, ":");
 	}
-	free(path);
+	free(path_env);
 
 	return (1);
 }
 
 /**
- * build_path - Build Command Path
- * @command: Executable Command
- * @dir: Directory Containing Command
- * Return: Parsed Full Path Of Command Or NULL In Case Of Failure
+ * construct_command_path - Build Full Path for Command
+ * @command_name: Executable Command Name
+ * @directory: Directory Containing Command
+ * Return: Parsed Full Path Of Command Or NULL on Failure
  */
-char *build_path(char *command, char *dir)
+char *build(char *command_name, char *directory)
 {
-	char *path;
-	size_t len;
+	char *full_path;
+	size_t length;
 
-	len = strlen(dir) + strlen(command) + 2;
-	path = (char *)malloc(sizeof(char) * len);
-	if (path == NULL)
+	length = strlen(directory) + strlen(command_name) + 2;
+	full_path = malloc(sizeof(char) * length);
+	if (full_path == NULL)
 	{
 		return (NULL);
 	}
 
-	memset(path, 0, len);
+	memset(full_path, 0, length);
 
-	strcat(path, dir);
-	strcat(path, "/");
-	strcat(path, command);
+	full_path = strcat(full_path, directory);
+	full_path = strcat(full_path, "/");
+	full_path = strcat(full_path, command_name);
 
-	return (path);
+	return (full_path);
 }
 
 /**
- * get_env - Gets The Value Of Environment Variable By Name
- * @name: Environment Variable Name
- * Return: The Value of the Environment Variable Else NULL.
+ * get_env_variable - Get Value of Environment Variable by Name
+ * @variable_name: Environment Variable Name
+ * Return: The Value of the Environment Variable, or NULL if not found.
  */
-char *get_env(char *name)
+char *_getenv(char *variable_name)
 {
-	size_t name_len, value_len;
-	char *value;
-	int i, x, j;
+	size_t name_length, value_length;
+	char *variable_value;
+	int i = 0, x, j;
 
-	name_len = strlen(name);
-	for (i = 0; environ[i]; i++)
+	name_length = strlen(variable_name);
+	while (environ[i])
 	{
-		if (strncmp(name, environ[i], name_len) == 0)
+		if (strncmp(variable_name, environ[i], name_length) == 0)
 		{
-			value_len = strlen(environ[i]) - name_len;
-			value = (char *)malloc(sizeof(char) * value_len);
-			if (!value)
+			value_length = strlen(environ[i]) - name_length;
+			variable_value = malloc(sizeof(char) * value_length);
+			if (!variable_value)
 			{
-				free(value);
-				perror("unable to alloc");
+				free(variable_value);
+				perror("unable to allocate");
 				return (NULL);
 			}
 
 			j = 0;
-			for (x = name_len + 1; environ[i][x]; x++, j++)
+			x = name_length + 1;
+			while (environ[i][x])
 			{
-				value[j] = environ[i][x];
+				variable_value[j] = environ[i][x];
+				x++;
+				j++;
 			}
-			value[j] = '\0';
+			variable_value[j] = '\0';
 
-			return (value);
+			return (variable_value);
 		}
+		i++;
 	}
 
 	return (NULL);

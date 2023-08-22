@@ -3,13 +3,13 @@
 /**
  * handle_builtin - Handle Builtin Command
  * @cmd: Parsed Command
- * @er:statue of last Excute
- * Return: -1 Fail 0 Succes (Return :Excute Builtin)
+ * @last_execution_status: Status of the last execution
+ * Return: -1 on failure, 0 on success (Return: Execute Builtin)
  */
 
-int handle_builtin(char **cmd, int er)
+int handle_builtin(char **cmd, int last_execution_status)
 {
-	 bul_t bil[] = {
+	bul_t builtin_commands[] = {
 		{"cd", change_dir},
 		{"env", dis_env},
 		{"help", display_help},
@@ -17,28 +17,29 @@ int handle_builtin(char **cmd, int er)
 		{"history", history_dis},
 		{NULL, NULL}
 	};
-	int i = 0;
+	int index = 0;
 
-	while ((bil + i)->command)
+	while (builtin_commands[index].command != NULL)
 	{
-		if (_strcmp(cmd[0], (bil + i)->command) == 0)
+		if (_strcmp(cmd[0], builtin_commands[index].command) == 0)
 		{
-			return ((bil + i)->fun(cmd, er));
+			return (builtin_commands[index].fun(cmd, last_execution_status));
 		}
-		i++;
+		index++;
 	}
 	return (-1);
 }
+
 /**
- * check_cmd - Excute Simple Shell Command (Fork,Wait,Excute)
+ * check_cmd - Execute Simple Shell Command (Fork, Wait, Execute)
  *
- * @cmd:Parsed Command
- * @input: User Input
- * @c:Shell Excution Time Case of Command Not Found
- * @argv:Program Name
- * Return: 1 Case Command Null -1 Wrong Command 0 Command Excuted
+ * @cmd: Parsed Command
+ * @user_input: User Input
+ * @execution_time: Shell Execution Time, in case of command not found
+ * @argv: Program Name
+ * Return: 1 if command is NULL, -1 if wrong command, 0 if command executed
  */
-int check_cmd(char **cmd, char *input, int c, char **argv)
+int check_cmd(char **cmd, char *user_input, int execution_time, char **argv)
 {
 	int status;
 	pid_t pid;
@@ -59,29 +60,31 @@ int check_cmd(char **cmd, char *input, int c, char **argv)
 	{
 		if (_strncmp(*cmd, "./", 2) != 0 && _strncmp(*cmd, "/", 1) != 0)
 		{
-			parse_cmd(cmd);
+			path_cmd(cmd);
 		}
 
 		if (execve(*cmd, cmd, environ) == -1)
 		{
-			print_echo(cmd[0], c, argv);
-			free(input);
+			print_error(*cmd, execution_time, argv);
+			free(user_input);
 			free(cmd);
 			exit(EXIT_FAILURE);
 		}
 		return (EXIT_SUCCESS);
 	}
+
 	wait(&status);
 	return (0);
 }
+
 /**
- * signal_to_handel - Handle ^C
- * @sig:Captured Signal
+ * signal_to_handle - Handle SIGINT (^C)
+ * @signal_number: Captured Signal
  * Return: Void
  */
-void handle_signal(int sig)
+void signal_to_handle(int signal_number)
 {
-	if (sig == SIGINT)
+	if (signal_number == SIGINT)
 	{
 		PRINTER("\n$ ");
 	}

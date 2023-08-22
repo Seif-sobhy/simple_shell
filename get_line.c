@@ -1,66 +1,67 @@
-
 #include "shell.h"
 
 /**
-* _getline - Read The Input By User From Stdin
-* Return: Input
-*/
+ * _getline - Read Input From Standard Input
+ * Return: Input String
+ */
 char *_getline()
 {
-int i, buffsize = BUFSIZE, rd;
-char c = 0;
-char *buff = malloc(buffsize);
+	int index = 0, buffer_size = BUFSIZE, read_result;
+	char current_char = 0;
+	char *input_buffer = malloc(buffer_size);
 
-	if (buff == NULL)
+	if (input_buffer == NULL)
 	{
-		free(buff);
+		free(input_buffer);
 		return (NULL);
 	}
 
-	for (i = 0; c != EOF && c != '\n'; i++)
+	while (current_char != EOF && current_char != '\n')
 	{
 		fflush(stdin);
-		rd = read(STDIN_FILENO, &c, 1);
-		if (rd == 0)
+		read_result = read(STDIN_FILENO, &current_char, 1);
+		if (read_result == 0)
 		{
-			free(buff);
+			free(input_buffer);
 			exit(EXIT_SUCCESS);
 		}
-		buff[i] = c;
-		if (buff[0] == '\n')
+		input_buffer[index] = current_char;
+		if (input_buffer[0] == '\n')
 		{
-			free(buff);
+			free(input_buffer);
 			return ("\0");
 		}
-		if (i >= buffsize)
+		if (index >= buffer_size)
 		{
-			buff = _mem_realloc(buff, buffsize, buffsize + 1);
-			if (buff == NULL)
+			input_buffer = _realloc(input_buffer, buffer_size, buffer_size + 1);
+			if (input_buffer == NULL)
 			{
 				return (NULL);
 			}
 		}
+		index++;
 	}
-	buff[i] = '\0';
-	hashtag_handle(buff);
-	return (buff);
+	input_buffer[index] = '\0';
+	hashtag_handle(input_buffer);
+	return (input_buffer);
 }
 
 /**
- * hashtag_handle - remove everything after #
- * @buff: input;
- * Return:void
+ * hashtag_handle - Remove characters after #
+ * @buffer: Input buffer
+ * Return: void
  */
-void hashtag_handle(char *buff)
+void hashtag_handle(char *buffer)
 {
-	int i;
+	int index = 0;
 
-		for (i = 0; buff[i] != '\0'; i++)
+	while (buffer[index] != '\0')
+	{
+		if (buffer[index] == '#')
 		{
-			if (buff[i] == '#')
-			{
-			buff[i] = '\0';
+			buffer[index] = '\0';
 			break;
-			}
+		}
+		index++;
 	}
 }

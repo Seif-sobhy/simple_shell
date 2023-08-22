@@ -51,37 +51,37 @@ char *_strdup(char *str);
 
 /**###### MEMORIE  MANGMENT ####*/
 
-void free_environment(char **env);
-void *fill_array(void *a, int el, unsigned int len);
-char *copy_memory(char *dest, char *src, unsigned int n);
-void *allocate_memory(unsigned int size);
-void *_mem_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
-void free_all_strings(char **input, char *line);
+void free_env(char **env);
+void *fill_an_array(void *a, int el, unsigned int len);
+char *_memcpy(char *dest, char *src, unsigned int n);
+void *_calloc(unsigned int size);
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+void free_all(char **input, char *line);
 
 /**###### INPUT Function ######*/
 
-void display_shell_prompt(void);
-void handle_signal(int sig);
+void prompt(void);
+void signal_to_handel(int sig);
 char *_getline(void);
 
 /** ###### Command parser and extractor ###*/
 
-int search_path(char **line);
-char *get_env(char *name);
+int path_cmd(char **line);
+char *_getenv(char *name);
 char **parse_cmd(char *cmd);
-int handle_custom_commands(char **cmd, int er);
+int handle_builtin(char **cmd, int er);
 void read_file(char *filename, char **argv);
-char *build_path(char *token, char *value);
-int check_builtin(char **cmd);
-void creat_envi(char **envi);
-int execute_external_command(char **tokens, char *line, int count, char **argv);
+char *build(char *token, char *value);
+int is_builtin(char **cmd);
+void creat_environment(char **envi);
+int check_cmd(char **tokens, char *line, int count, char **argv);
 void treat_file(char *line, int counter, FILE *fd, char **argv);
 void exit_bul_for_file(char **cmd, char *line, FILE *fd);
 
 /** ####BUL FUNC #####*/
 
 void hashtag_handle(char *buff);
-int custom_history(char *input);
+int history(char *input);
 int history_dis(char **cmd, int er);
 int dis_env(char **cmd, int er);
 int change_dir(char **cmd, int er);
@@ -93,8 +93,8 @@ int print_echo(char **cmd);
 /** ####error handle and Printer ####*/
 void print_number(unsigned int n);
 void print_number_in(int n);
-void error_display(char *line, int c, char **argv);
-void custom_error_print(char **argv, int c, char **cmd);
+void print_error(char *line, int c, char **argv);
+void _prerror(char **argv, int c, char **cmd);
 
 
 /**

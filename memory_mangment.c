@@ -1,13 +1,13 @@
 #include "shell.h"
 
 /**
- **_mem_realloc -  Reallocates A Memory Block Using Malloc And Free
- *@ptr: Pointer
- *@old_size: Previous Size Of The Pointer
- *@new_size: New Size Of The Pointer
- *Return: Void Pointer Rellocated Memory
+ * _realloc - Reallocates A Memory Block Using Malloc And Free
+ * @ptr: Pointer
+ * @old_size: Previous Size Of The Pointer
+ * @new_size: New Size Of The Pointer
+ * Return: Void Pointer Rellocated Memory
  */
-void *_mem_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 {
 	void *result;
 
@@ -23,12 +23,12 @@ void *_mem_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 		return (NULL);
 	if (ptr == NULL)
 	{
-		fill_array(result, '\0', new_size);
+		fill_an_array(result, '\0', new_size);
 		free(ptr);
 	}
 	else
 	{
-		copy_memory(result, ptr, old_size);
+		_memcpy(result, ptr, old_size);
 		free(ptr);
 	}
 	return (result);
@@ -36,75 +36,68 @@ void *_mem_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 
 /**
  * free_all - Free Array Of Char Pointer And Char Pointer
- * @cmd: Array Pointer
- * @line: Char Pointer
+ * @cmd_array: Array Pointer
+ * @input_line: Char Pointer
  * Return: Void
  */
-void free_all_strings(char **cmd, char *line)
+void free_all(char **cmd_array, char *input_line)
 {
-	free(cmd);
-	free(line);
-	cmd = NULL;
-	line = NULL;
+	free(cmd_array);
+	free(input_line);
+	cmd_array = NULL;
+	input_line = NULL;
 }
 
 /**
  * copy_memory - Copy Bytes From Source To Destination
- * @dest: Destination Pointer
- * @src: Source Pointer
- * @n: Size (How Many Bytes To Copy)
+ * @destination: Destination Pointer
+ * @source: Source Pointer
+ * @num_bytes: Number Of Bytes To Copy
  * Return: Void Pointer
  */
-char *copy_memory(char *dest, char *src, unsigned int n)
+char *_memcpy(char *destination, char *source, unsigned int num_bytes)
 {
-	unsigned int i;
-
-	for (i = 0; i < n; i++)
+	for (unsigned int i = 0; i < num_bytes; i++)
 	{
-		dest[i] = src[i];
+		destination[i] = source[i];
 	}
-	return (dest);
+	return (destination);
 }
 
 /**
- * fill_array - Fill An Array With A Given Element
+ * fill_with_char - Fill An Array With A Specified Character
  * @array: Void Pointer
- * @element: Int
- * @length: Length Int
+ * @character: Character To Fill With
+ * @length: Length Of The Array
  * Return: Void Pointer
  */
-void *fill_array(void *array, int element, unsigned int length)
+void *fill_with_char(void *array, int character, unsigned int length)
 {
-	char *ptr = array;
-	unsigned int i = 0;
+	char *pointer = array;
 
-	while (i < length)
+	for (unsigned int i = 0; i < length; i++)
 	{
-		*ptr = element;
-		ptr++;
-		i++;
+		*pointer = character;
+		pointer++;
 	}
 	return (array);
 }
 
 /**
- * allocate_memory - Allocates Memory For An Array, Using Malloc.
+ * _calloc - Allocates Memory For An Array, Using Malloc.
  * @size: Size
  * Return: Void Pointer
  */
-void *allocate_memory(unsigned int size)
+void *_calloc(unsigned int size)
 {
-	char *ptr;
-	unsigned int i;
 
-	if (size == 0)
+	char *allocated_memory = malloc(size);
+
+	if (allocated_memory == NULL)
 		return (NULL);
-	ptr = malloc(size);
-	if (ptr == NULL)
-		return (NULL);
-	for (i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
-		ptr[i] = '\0';
+		allocated_memory[i] = '\0';
 	}
-	return (ptr);
+	return (allocated_memory);
 }
