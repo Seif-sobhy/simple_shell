@@ -1,5 +1,5 @@
 #include "shell.h"
-#include "shell.c"
+
 /**
  * _stcp - Copie Source To Destination Char
  * @dest:Destination

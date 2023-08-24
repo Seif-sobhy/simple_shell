@@ -1,5 +1,5 @@
 #include "shell.h"
-#include "shell.c"
+
 /**
  * hist_dis - Display History Of User Input Simple Shell
  * @c:Parsed Command

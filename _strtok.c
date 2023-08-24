@@ -1,5 +1,5 @@
 #include "shell.h"
-#include "shell.c"
+
 /**
  * check_diff - Checks If A Character Match Any Char *
  * @c: Character To Check

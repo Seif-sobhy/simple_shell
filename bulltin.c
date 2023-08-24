@@ -1,5 +1,5 @@
 #include "shell.h"
-#include "shell.c"
+
 /**
  * ex_bl - Exit Statue Shell
  * @cmd: Parsed Command

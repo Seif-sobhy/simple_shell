@@ -1,5 +1,5 @@
 #include "shell.h"
-#include "shell.c"
+
 /**
  * _stcmp - Compare Two String
  * @s1:String 1
