@@ -10,18 +10,18 @@
 int handle_builtin(char **cmd, int last_execution_status)
 {
 	bul_t builtin_commands[] = {
-		{"cd", change_dir},
-		{"env", dis_env},
-		{"help", display_help},
+		{"cd", ch_directory},
+		{"env", ds_envir},
+		{"help", dis_hlp},
 		{"echo", echo_bul},
-		{"history", history_dis},
+		{"history", history_display},
 		{NULL, NULL}
 	};
 	int index = 0;
 
 	while (builtin_commands[index].command != NULL)
 	{
-		if (_strcmp(cmd[0], builtin_commands[index].command) == 0)
+		if (_stcmp(cmd[0], builtin_commands[index].command) == 0)
 		{
 			return (builtin_commands[index].fun(cmd, last_execution_status));
 		}
@@ -58,7 +58,7 @@ int check_cmd(char **cmd, char *user_input, int execution_time, char **argv)
 
 	if (pid == 0)
 	{
-		if (_strncmp(*cmd, "./", 2) != 0 && _strncmp(*cmd, "/", 1) != 0)
+		if (strncmp(*cmd, "./", 2) != 0 && strncmp(*cmd, "/", 1) != 0)
 		{
 			path_cmd(cmd);
 		}
