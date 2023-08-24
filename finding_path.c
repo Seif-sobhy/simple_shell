@@ -31,7 +31,7 @@ int find_executable_in_path(char **command)
 }
 
 /**
- * construct_command_path - Build Full Path for Command
+ * build - Build Full Path for Command
  * @command_name: Executable Command Name
  * @directory: Directory Containing Command
  * Return: Parsed Full Path Of Command Or NULL on Failure
@@ -58,7 +58,7 @@ char *build(char *command_name, char *directory)
 }
 
 /**
- * get_env_variable - Get Value of Environment Variable by Name
+ * _getenv - Get Value of Environment Variable by Name
  * @variable_name: Environment Variable Name
  * Return: The Value of the Environment Variable, or NULL if not found.
  */

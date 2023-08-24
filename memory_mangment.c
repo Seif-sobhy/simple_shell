@@ -49,7 +49,7 @@ void free_all(char **cmd_array, char *input_line)
 }
 
 /**
- * copy_memory - Copy Bytes From Source To Destination
+ * _memcpy - Copy Bytes From Source To Destination
  * @destination: Destination Pointer
  * @source: Source Pointer
  * @num_bytes: Number Of Bytes To Copy
