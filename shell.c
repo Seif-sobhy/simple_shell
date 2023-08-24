@@ -26,10 +26,10 @@ int main(__attribute__((unused)) int argc, char **argv)
 			continue;
 		}
 		history(user_input);
-		command_tokens = parse_cmd(user_input);
-		if (_strcmp(command_tokens[0], "exit") == 0)
+		command_tokens = path_cmd(user_input);
+		if (_stcmp(command_tokens[0], "exit") == 0)
 		{
-			exit_bul(command_tokens, user_input, argv, execution_count);
+			ex_bl(command_tokens, user_input, argv, execution_count);
 		}
 		else if (is_builtin(command_tokens) == 0)
 		{
@@ -70,7 +70,7 @@ int is_builtin(char **cmd)
 
 	while ((builtin_functions + i)->command)
 	{
-		if (_strcmp(cmd[0], (builtin_functions + i)->command) == 0)
+		if (_stcmp(cmd[0], (builtin_functions + i)->command) == 0)
 			return (0);
 		i++;
 	}
@@ -88,7 +88,7 @@ void creat_environment(char **envi)
 
 	while (environ[i])
 	{
-		envi[i] = _strdup(environ[i]);
+		envi[i] = strdup(environ[i]);
 		i++;
 	}
 	envi[i] = NULL;
