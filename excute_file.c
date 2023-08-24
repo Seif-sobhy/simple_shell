@@ -43,7 +43,7 @@ void treat_file(char *line, int counter, FILE *fp, char **argv)
 	char **cmd;
 	int st = 0;
 
-	cmd = path_cmd(line);
+	cmd = parse_cmd(line);
 
 	if (strncmp(cmd[0], "exit", 4) == 0)
 	{

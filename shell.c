@@ -3,58 +3,58 @@
 /**
  * main - Simple Shell (Hsh)
  * @argc: Argument Count
- * @argv: Argument Value
+ * @argv:Argument Value
  * Return: Exit Value By Status
  */
 
 int main(__attribute__((unused)) int argc, char **argv)
 {
-	char *user_input, **command_tokens;
-	int execution_count = 0, status = 1, st = 0;
+	char *input, **cmd;
+	int counter = 0, statue = 1, st = 0;
 
 	if (argv[1] != NULL)
 		read_file(argv[1], argv);
 	signal(SIGINT, signal_to_handel);
-	while (status)
+	while (statue)
 	{
-		execution_count++;
+		counter++;
 		if (isatty(STDIN_FILENO))
 			prompt();
-		user_input = _getline();
-		if (user_input[0] == '\0')
+		input = _getline();
+		if (input[0] == '\0')
 		{
 			continue;
 		}
-		history(user_input);
-		command_tokens = path_cmd(user_input);
-		if (_stcmp(command_tokens[0], "exit") == 0)
+		history(input);
+		cmd = parse_cmd(input);
+		if (_stcmp(cmd[0], "exit") == 0)
 		{
-			ex_bl(command_tokens, user_input, argv, execution_count);
+			ex_bl(cmd, input, argv, counter);
 		}
-		else if (is_builtin(command_tokens) == 0)
+		else if (is_builtin(cmd) == 0)
 		{
-			st = handle_builtin(command_tokens, st);
-			free_all(command_tokens, user_input);
+			st = handle_builtin(cmd, st);
+			free_all(cmd, input);
 			continue;
 		}
 		else
 		{
-			st = check_cmd(command_tokens, user_input, execution_count, argv);
-		}
-		free_all(command_tokens, user_input);
-	}
-	return (status);
-}
+			st = check_cmd(cmd, input, counter, argv);
 
+		}
+		free_all(cmd, input);
+	}
+	return (statue);
+}
 /**
- * is_builtin - Check if a command is a built-in command
+ * check_builtin - check builtin
  *
- * @cmd: command to check
- * Return: 0 Success, -1 Fail
+ * @cmd:command to check
+ * Return: 0 Succes -1 Fail
  */
-int is_builtin(char **cmd)
+int check_builtin(char **cmd)
 {
-	bul_t builtin_functions[] = {
+	bul_t fun[] = {
 		{"cd", NULL},
 		{"help", NULL},
 		{"echo", NULL},
@@ -62,34 +62,29 @@ int is_builtin(char **cmd)
 		{NULL, NULL}
 	};
 	int i = 0;
-
-	if (*cmd == NULL)
+		if (*cmd == NULL)
 	{
 		return (-1);
 	}
 
-	while ((builtin_functions + i)->command)
+	while ((fun + i)->command)
 	{
-		if (_stcmp(cmd[0], (builtin_functions + i)->command) == 0)
+		if (_stcmp(cmd[0], (fun + i)->command) == 0)
 			return (0);
 		i++;
 	}
 	return (-1);
 }
-
 /**
- * creat_environment - Create Array of Environment Variables
- * @envi: Array of Environment Variables
+ * creat_envi - Creat Array of Enviroment Variable
+ * @envi: Array of Enviroment Variable
  * Return: Void
  */
-void creat_environment(char **envi)
+void creat_envi(char **envi)
 {
-	int i = 0;
+	int i;
 
-	while (environ[i])
-	{
+	for (i = 0; environ[i]; i++)
 		envi[i] = strdup(environ[i]);
-		i++;
-	}
 	envi[i] = NULL;
 }
